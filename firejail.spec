@@ -1,16 +1,16 @@
-# Based on initial .spec file from upstream, link here https://github.com/netblue30/firejail/blob/master/platform/rpm/firejail.spec
+# Based on initial .spec file from upstream, link here 
+# https://github.com/netblue30/firejail/blob/master/platform/rpm/firejail.spec
 # Originally created by Firejail authors
-
-%define url https://github.com/netblue30/firejail
 
 Name: firejail
 Version: 0.9.56
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Linux namespaces sandbox program
+BuildRequires: gcc make
 
 License: GPLv2+
+URL: https://github.com/netblue30/firejail
 Source0: %{url}/archive/%{version}.tar.gz
-URL: %{url}
 
 %description
 Firejail is a SUID sandbox program that reduces the risk of security
@@ -22,7 +22,7 @@ using Linux namespaces. It includes a sandbox profile for Mozilla Firefox.
 
 %build
 %configure --disable-userns --disable-contrib-install
-make %{?_smp_mflags}
+%make_build %{?_smp_mflags -j3}
 
 %install
 %make_install
@@ -47,5 +47,8 @@ chmod 0755 %{buildroot}%{_libdir}/%{name}/lib*.so
 %config(noreplace) %{_sysconfdir}/%{name}
 
 %changelog
+* Thu Nov 8 2018 Ondrej Dubaj <odubaj@redhat.com> 0.9.56-2
+- Fixed .spec file according to review request comments (#1645172)
+
 * Mon Oct 22 2018 Ondrej Dubaj <odubaj@redhat.com> 0.9.56-1
 - First firejail RPM package for Fedora
