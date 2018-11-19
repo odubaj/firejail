@@ -4,10 +4,12 @@
 
 Name: firejail
 Version: 0.9.56
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Linux namespaces sandbox program
 BuildRequires: gcc make
 
+# spec released under GPLv2+, contacted upstream whether it can be 
+# released under MIT
 License: GPLv2+
 URL: https://github.com/netblue30/firejail
 Source0: %{url}/archive/%{version}/%{name}-%{version}.tar.gz
@@ -26,9 +28,8 @@ using Linux namespaces. It includes a sandbox profile for Mozilla Firefox.
 
 %install
 %make_install
-chmod 0755 %{buildroot}%{_bindir}/%{name}
 chmod 0755 %{buildroot}%{_libdir}/%{name}/lib*.so
-mv %{buildroot}%{_datarootdir}/bash-completion/ %{buildroot}/etc/bash-completion.d/
+mv %{buildroot}%{_datarootdir}/bash-completion/completions/ %{buildroot}/etc/bash_completion.d/
 
 %files
 %doc README RELNOTES CONTRIBUTING.md
@@ -38,7 +39,7 @@ mv %{buildroot}%{_datarootdir}/bash-completion/ %{buildroot}/etc/bash-completion
 %{_bindir}/firemon
 %{_bindir}/%{name}
 %{_libdir}/%{name}
-%config(noreplace) /etc/bash-completion.d/completions/*
+%config(noreplace) /etc/bash_completion.d/*
 %{_docdir}/%{name}/COPYING
 %{_mandir}/man5/%{name}-login.5.*
 %{_mandir}/man5/%{name}-profile.5.*
@@ -47,6 +48,9 @@ mv %{buildroot}%{_datarootdir}/bash-completion/ %{buildroot}/etc/bash-completion
 %config(noreplace) %{_sysconfdir}/%{name}
 
 %changelog
+* Mon Nov 19 2018 Ondrej Dubaj <odubaj@redhat.com> 0.9.56-4
+- Fixed problem with bash completion scripts
+
 * Thu Nov 15 2018 Ondrej Dubaj <odubaj@redhat.com> 0.9.56-3
 - Fixed .spec file according to review request comments (#1645172)
 
