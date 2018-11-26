@@ -4,9 +4,9 @@
 
 Name: firejail
 Version: 0.9.56
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Linux namespaces sandbox program
-BuildRequires: gcc make
+BuildRequires: gcc make python3-devel
 
 # spec released under GPLv2+, contacted upstream whether it can be 
 # released under MIT
@@ -29,6 +29,14 @@ using Linux namespaces. It includes a sandbox profile for Mozilla Firefox.
 %install
 %make_install
 chmod 0755 %{buildroot}%{_libdir}/%{name}/lib*.so
+for f in \
+%{buildroot}%{_libdir}/%{name}/fj-mkdeb.py \
+%{buildroot}%{_libdir}/%{name}/fjclip.py \
+%{buildroot}%{_libdir}/%{name}/fjdisplay.py \
+%{buildroot}%{_libdir}/%{name}/fjresize.py
+do
+    sed -i "1 s/^.*$/\#\!\/usr\/bin\/python3/" "$f";
+done
 
 %files
 %doc README RELNOTES CONTRIBUTING.md
@@ -47,6 +55,9 @@ chmod 0755 %{buildroot}%{_libdir}/%{name}/lib*.so
 %config(noreplace) %{_sysconfdir}/%{name}
 
 %changelog
+* Thu Nov 22 2018 Ondrej Dubaj <odubaj@redhat.com> 0.9.56-6
+- Added python3-devel to BuildRequires, modified python shebangs
+
 * Wed Nov 21 2018 Ondrej Dubaj <odubaj@redhat.com> 0.9.56-5
 - Modified path to bash completion scripts
 
